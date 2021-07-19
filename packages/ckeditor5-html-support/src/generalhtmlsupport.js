@@ -10,6 +10,7 @@
 import { Plugin } from 'ckeditor5/src/core';
 import DataFilter from './datafilter';
 import CodeBlockHtmlSupport from './integrations/codeblock';
+import MediaEmbedElementSupport from './integrations/mediaembed';
 import TableElementSupport from './integrations/table';
 
 /**
@@ -44,7 +45,8 @@ export default class GeneralHtmlSupport extends Plugin {
 		return [
 			DataFilter,
 			CodeBlockHtmlSupport,
-			TableElementSupport
+			TableElementSupport,
+			MediaEmbedElementSupport
 		];
 	}
 }

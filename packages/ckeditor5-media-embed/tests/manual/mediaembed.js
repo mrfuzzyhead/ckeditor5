@@ -7,15 +7,17 @@
 
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 import ArticlePluginSet from '@ckeditor/ckeditor5-core/tests/_utils/articlepluginset';
+import SourceEditing from '@ckeditor/ckeditor5-source-editing/src/sourceediting';
 import MediaEmbed from '../../src/mediaembed';
 import MediaEmbedToolbar from '../../src/mediaembedtoolbar';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
 		image: { toolbar: [ 'toggleImageCaption', 'imageTextAlternative' ] },
-		plugins: [ ArticlePluginSet, MediaEmbed, MediaEmbedToolbar ],
+		plugins: [ ArticlePluginSet, MediaEmbed, MediaEmbedToolbar, SourceEditing ],
 		toolbar: [
-			'heading', '|', 'mediaEmbed', '|', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', 'link', 'undo', 'redo'
+			'heading', '|', 'mediaEmbed', '|', 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote', 'link', 'undo', 'redo',
+			'sourceEditing'
 		],
 		mediaEmbed: {
 			previewsInData: true,
