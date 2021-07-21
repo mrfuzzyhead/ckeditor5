@@ -32,6 +32,7 @@ import { isElement } from 'lodash-es';
 const BR_FILLER_REF = BR_FILLER( document ); // eslint-disable-line new-cap
 const NBSP_FILLER_REF = NBSP_FILLER( document ); // eslint-disable-line new-cap
 const MARKED_NBSP_FILLER_REF = MARKED_NBSP_FILLER( document ); // eslint-disable-line new-cap
+const EMPTY_DOM_ELEMENTS = [ 'IMG' ];
 
 /**
  * `DomConverter` is a set of tools to do transformations between DOM nodes and view nodes. It also handles
@@ -1171,6 +1172,10 @@ export default class DomConverter {
 		}
 
 		if ( isElement( prevNode ) ) {
+			if ( isEmptyElement( prevNode ) ) {
+				return false;
+			}
+
 			return true;
 		}
 
@@ -1223,6 +1228,10 @@ export default class DomConverter {
 			else if ( value.item.is( 'element', 'br' ) ) {
 				return null;
 			}
+			// Empty element (e.g. <img/>) found – it works like a block boundary, so do not scan further.
+			else if ( value.item.is( 'emptyElement' ) ) {
+				return null;
+			}
 			// Found a text node in the same container element.
 			else if ( value.item.is( '$textProxy' ) ) {
 				return value.item;
@@ -1269,6 +1278,10 @@ export default class DomConverter {
 				}
 
 				if ( node.tagName == 'BR' ) {
+					return NodeFilter.FILTER_ACCEPT;
+				}
+
+				if ( isEmptyElement( node ) ) {
 					return NodeFilter.FILTER_ACCEPT;
 				}
 
@@ -1351,6 +1364,15 @@ function hasBlockParent( domNode, blockElements ) {
 	const parent = domNode.parentNode;
 
 	return parent && parent.tagName && blockElements.includes( parent.tagName.toLowerCase() );
+}
+
+// Checks if an element is empty (void). Empty elements are <img />, <input />, etc.
+// As per https://developer.mozilla.org/en-US/docs/Glossary/Empty_element.
+//
+// @param {Node} domNode DOM node.
+// @returns {Boolean}
+function isEmptyElement( domNode ) {
+	return EMPTY_DOM_ELEMENTS.includes( domNode.tagName );
 }
 
 /**
